@@ -122,17 +122,18 @@ class PFD(Utilities.Utilities):
         self.pgdev = infile.read(struct.unpack(swapchar+"i", infile.read(4))[0])
         
         test = infile.read(16)
+        #test.decode("utf-8")
         has_posn = 1
         for ii in range(16):
-            # print(test)
-            if str(test[ii]) not in '0123456789:.-\0':
+            
+            if test.decode("utf-8")[ii] not in '0123456789:.-\0':
                 has_posn = 0
                 break
-            
+
         if has_posn:
-            self.rastr = test[:test.find('\0')]
+            self.rastr = test[:test.find('\0'.encode())]
             test = infile.read(16)
-            self.decstr = test[:test.find('\0')]
+            self.decstr = test[:test.find('\0'.encode())]
             (self.dt, self.startT) = struct.unpack(swapchar+"dd", infile.read(2*8))
         else:
             self.rastr = "Unknown"
